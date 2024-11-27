@@ -4,7 +4,7 @@ const gameOverNode = document.getElementById("game-over-screen");
 const startBtnNode = document.querySelector("#start-btn");
 
 let character = null
-const enemies = [];
+let enemies = [];
 const gameFloor = document.createElement("div")
 
 gameFloor.id = "suelo";
@@ -26,11 +26,26 @@ function startGame() {
     character = new Character();
     gameScreenNode.appendChild(gameFloor);
     startGameLoop();
+    if (character.handleLevelComplete){
+      enemies.destroy
+    }
   }
 }
 
 // ------------------------- ENEMIGOS Y LOOP --------------------------------//
-
+let currentLevelIndex = 0; // Índice del nivel actual
+const levels = [
+  {
+    enemyCount: 5, // Número de enemigos en este nivel
+    // Puedes agregar más configuraciones del nivel aquí
+  },
+  {
+    enemyCount: 10,
+  },
+  {
+    enemyCount: 15,
+  },
+];
 
 function startGameLoop() {
   // Loop de creación de enemigos
@@ -54,7 +69,7 @@ function gameLoop() {
         enemies.splice(index, 1); // Quitar del array
       }
 
-      // Detectar colisiones con el personaje
+      // colisiones con el personaje
       if (
           character &&
           character.x < enemy.x + enemy.width &&
@@ -63,11 +78,11 @@ function gameLoop() {
           character.y + character.node.offsetHeight > enemy.y
       ) {
           console.log("¡Colisión detectada!");
-          // Aquí puedes agregar la lógica de fin de juego o restar vidas
+          //!fisicas eneimgo-char
       }
-  });
+  })
 
-  // Aquí podrías añadir más funciones de objetos como balas, obstáculos, etc.
+  //! balas, obstáculos, etc.
 }
 
 

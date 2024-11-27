@@ -10,6 +10,7 @@ class Character {
         this.velocityY = 0
         this.isJumping = false
         this.movementInterval = null
+        this.tryToEsc = false
 
     this.node.style.position = 'absolute';
     this.node.style.left = `${this.x}px`;
@@ -46,10 +47,12 @@ class Character {
           if (this.x < 0) this.x = 0; //! borde izquierdo
           if (this.x > screenWidth - this.node.offsetWidth) {
             this.x = screenWidth - this.node.offsetWidth; //! borde derecho
-            if (!this.tryToEsc) {
+            console.log(this.x > screenWidth - this.node.offsetWidth)
+            
               this.tryToEsc = true;
+              console.log("rabano")
               this.onEscape();
-            }
+            
           }
     
           this.node.style.left = `${this.x}px`;
@@ -68,9 +71,33 @@ class Character {
         clearInterval(this.movementInterval);
         this.movementInterval = null;
       }
-      onEscape() {
-        console.log("Nivel completado, cambiando pantalla...");
-        handleLevelComplete();
-      }
+      
+      handleLevelComplete() {
+        currentLevelIndex++;
+        if (currentLevelIndex >= levels.length) {
+          console.log("has completado todos los niveles!");
+            
+          currentLevelIndex = 0; //! Reiniciar al primer nivel
+        }
+        
+        // Resetear el personaje a la posición inicial
+        this.x = 0;
+        this.node.style.left = `${character.x}px`;
+        this.y = 20;
+        this.node.style.bottom = `${character.y}px`;
     
+        // Crear los enemigos para el siguiente nivel
+        enemies.length = 0; 
+        for (let i = 0; i < levels[currentLevelIndex].enemyCount; i++) {
+            const newEnemy = new Enemy();
+            enemies.push(newEnemy);
+        }
+    
+        console.log(`Nivel ${currentLevelIndex + 1} iniciado`);
+     }
+
+     onEscape() {
+        console.log("Nivel completado, cambiando pantalla...");
+        this.handleLevelComplete()
+     }
 }
