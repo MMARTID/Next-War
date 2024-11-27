@@ -68,9 +68,9 @@ class Character {
         clearInterval(this.movementInterval);
         this.movementInterval = null;
       }
-    
       onEscape() {
         console.log("Nivel completado, cambiando pantalla...");
         handleLevelComplete();
       }
+    
 }
