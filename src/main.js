@@ -5,6 +5,7 @@ const startBtnNode = document.querySelector("#start-btn");
 
 let character = null
 let enemies = [];
+let bullets = [];
 const gameFloor = document.createElement("div")
 
 gameFloor.id = "suelo";
@@ -26,63 +27,93 @@ function startGame() {
     character = new Character();
     gameScreenNode.appendChild(gameFloor);
     startGameLoop();
-    if (character.handleLevelComplete){
-      enemies.destroy
-    }
+   
   }
 }
 
 // ------------------------- ENEMIGOS Y LOOP --------------------------------//
-let currentLevelIndex = 0; // Índice del nivel actual
+let currentLevelIndex = 0; // Índice de nivel 
 const levels = [
   {
-    enemyCount: 5, // Número de enemigos en este nivel
-    // Puedes agregar más configuraciones del nivel aquí
+    enemyCount: 5, 
+    allowedSides: ["right"],
   },
   {
     enemyCount: 10,
+    allowedSides: ["top", "bottom", "right"],
   },
   {
     enemyCount: 15,
+    allowedSides: ["left", "right", "top", "bottom"]
   },
 ];
 
 function startGameLoop() {
-  // Loop de creación de enemigos
+  //! Loop enemigos y niveles
   setInterval(() => {
-    const newEnemy = new Enemy();
+    const level = levels[currentLevelIndex]
+    const newEnemy = new Enemy(level.allowedSides);
     enemies.push(newEnemy);
-  }, 2000); //! 2 segundos
+  }, 2000); // 2 segundos
   
-  // Loop principal del juego
-  setInterval(gameLoop, 50); // Ejecutar el loop cada 50ms
+  //! Loop principal del juego
+  setInterval(gameLoop, 50); 
 }
 
 function gameLoop() {
-  // Actualizar enemigos
+  
   enemies.forEach((enemy, index) => {
-      enemy.update(); // Actualiza cada enemigo
+      enemy.update();
 
-      // Eliminar enemigos fuera de la pantalla
+      // Colisiones con las //!balas
+      bullets.forEach((bullet, bulletIndex) => {
+        if (bullet.x < enemy.x + enemy.width &&
+            bullet.x + bullet.width > enemy.x &&
+            bullet.y < enemy.y + enemy.height &&
+            bullet.y + bullet.height > enemy.y) {
+          
+          enemy.destroy();
+          bullet.destroy();
+          enemies.splice(index, 1);
+          bullets.splice(bulletIndex, 1);
+        }
+      });
+
       if (enemy.x + enemy.width < 0) {
-        enemy.destroy(); // Eliminar del DOM
-        enemies.splice(index, 1); // Quitar del array
+        enemy.destroy(); 
+        enemies.splice(index, 1);
       }
 
-      // colisiones con el personaje
-      if (
-          character &&
-          character.x < enemy.x + enemy.width &&
+      // colisiones con el //! personaje
+      if (character &&character.x < enemy.x + enemy.width &&
           character.x + character.node.offsetWidth > enemy.x &&
           character.y < enemy.y + enemy.height &&
           character.y + character.node.offsetHeight > enemy.y
       ) {
           console.log("¡Colisión detectada!");
-          //!fisicas eneimgo-char
+          gameOver()
       }
   })
+  bullets.forEach((bullet, index) => {
+    bullet.update();
 
-  //! balas, obstáculos, etc.
+    // Verificar si la //! bala colide con un enemigo
+    enemies.forEach((enemy, enemyIndex) => {
+        if (bullet.x < enemy.x + enemy.width &&
+            bullet.x + bullet.width > enemy.x &&
+            bullet.y < enemy.y + enemy.height &&
+            bullet.y + bullet.height > enemy.y) {
+   console.log("¡Enemigo destruido!");
+
+            bullet.destroy()
+            enemy.destroy()
+            
+            enemies.splice(enemyIndex, 1)
+            bullets.splice(index, 1)
+        }
+    })
+   })
+   bullets = bullets.filter(bullet => bullet.x <= gameScreenNode.offsetWidth && bullet.x >= 0)
 }
 
 
@@ -100,6 +131,10 @@ document.addEventListener('keydown', (event) => {
       console.log("Detectado mover a la izquierda");
       character.moveLeft()
   }
+  if (event.code === "Space" && character) {
+    console.log("Disparando...");
+    character.shoot();
+}
 })
 
 document.addEventListener("keyup", (event) => {
@@ -112,3 +147,8 @@ document.addEventListener("keyup", (event) => {
       character.stopMoving()
   }
 })
+function gameOver() {
+  console.log("Game Over");
+  gameOverNode.style.display = 'block';
+  gameScreenNode.style.display = 'none';
+}

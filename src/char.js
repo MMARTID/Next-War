@@ -4,9 +4,8 @@ class Character {
         this.node.src = "./assets/character-Idle01.png"
         this.x = 0;
         this.y = 20;
-        this.jumpHeight = 120;
         this.speed = 10
-        this.gravity = 0.5
+        this.gravity = 0.3
         this.velocityY = 0
         this.isJumping = false
         this.movementInterval = null
@@ -48,9 +47,8 @@ class Character {
           if (this.x > screenWidth - this.node.offsetWidth) {
             this.x = screenWidth - this.node.offsetWidth; //! borde derecho
             console.log(this.x > screenWidth - this.node.offsetWidth)
-            
               this.tryToEsc = true;
-              console.log("rabano")
+              console.log("borde derecho")
               this.onEscape();
             
           }
@@ -72,32 +70,8 @@ class Character {
         this.movementInterval = null;
       }
       
-      handleLevelComplete() {
-        currentLevelIndex++;
-        if (currentLevelIndex >= levels.length) {
-          console.log("has completado todos los niveles!");
-            
-          currentLevelIndex = 0; //! Reiniciar al primer nivel
-        }
-        
-        // Resetear el personaje a la posición inicial
-        this.x = 0;
-        this.node.style.left = `${character.x}px`;
-        this.y = 20;
-        this.node.style.bottom = `${character.y}px`;
-    
-        // Crear los enemigos para el siguiente nivel
-        enemies.length = 0; 
-        for (let i = 0; i < levels[currentLevelIndex].enemyCount; i++) {
-            const newEnemy = new Enemy();
-            enemies.push(newEnemy);
-        }
-    
-        console.log(`Nivel ${currentLevelIndex + 1} iniciado`);
-     }
-
-     onEscape() {
-        console.log("Nivel completado, cambiando pantalla...");
-        this.handleLevelComplete()
-     }
+      shoot() {
+        const bullet = new Bullet(this.x + this.node.offsetWidth, this.y + 25); // Ajuste de la posición
+        bullets.push(bullet);
+    }
 }
