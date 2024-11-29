@@ -56,6 +56,7 @@ function startGameLoop() {
 function gameLoop() {
   updateEnemies();
   updateBullets();
+  updateBombs();
   checkCollisions();
 }
 function updateEnemies() {
@@ -74,22 +75,44 @@ function updateBullets() {
   })}
 function checkCollisions() {
   enemies.forEach((enemy, enemyIndex) => {
-    // Colisión con el personaje
     if (character && colision(character, enemy)) {
       console.log("¡Colisión detectada con el personaje!");
       gameOver();
    }
  })
   bullets.forEach((bullet, bulletIndex) => {
-    enemies.forEach((enemy, enemyIndex) => {
-      if (colision(bullet, enemy)) {
-        console.log("¡Enemigo destruido!");
-        bullet.destroy();
-        enemy.destroy();
-        bullets.splice(bulletIndex, 1);
-        enemies.splice(enemyIndex, 1);
+
+    if (bullet instanceof Bomb) { 
+      // Si es bomba colisión con  personaje
+      if (character && colision(bullet, character)) {
+          console.log("¡El personaje fue alcanzado por una bomba!");
+          gameOver(); 
       }
-  })})
+    } else {
+      // !bomba : disparo
+      enemies.forEach((enemy, enemyIndex) => {
+          if (colision(bullet, enemy)) {
+              console.log("¡Enemigo destruido por el disparo!")
+              bullet.destroy()
+              enemy.destroy()
+              bullets.splice(bulletIndex, 1)
+              enemies.splice(enemyIndex, 1)
+          }
+      })
+    }
+})}
+function updateBombs() {
+  bullets.forEach((bullet) => {
+      if (bullet instanceof Bomb) { //! Solo bombas
+          bullet.update();
+      }
+  });
+
+  bullets = bullets.filter((bullet) => {
+      const isInside = bullet.y > 0;
+      if (!isInside) bullet.destroy();
+      return isInside;
+  });
 }
 
 function colision(obj1, obj2) {

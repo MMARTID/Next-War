@@ -50,6 +50,9 @@ class Enemy {
         this.x -= this.speed; //! Movimiento HACIA la derecha, 
         this.node.style.left = `${this.x}px`
 
+        if (this.y > gameScreenNode.offsetHeight / 2 && Math.random() < 0.01) {
+            this.dropBomb();
+        }
         if (this.x + this.width < 0) {
             this.destroy()
         }
@@ -58,13 +61,16 @@ class Enemy {
         this.width = this.node.offsetWidth;
         this.height = this.node.offsetHeight;
     }
-
+    dropBomb() {
+        const bomb = new Bomb(this.x + this.width / 2, this.y)
+        bullets.push(bomb)
+    }
 
     destroy() {
         if (gameScreenNode.contains(this.node)) {
           gameScreenNode.removeChild(this.node);
         } else {
-          console.warn("Intentando destruir un nodo que ya ha sido eliminado.");
+          console.warn("Intentando destruir un nodo que ya ha sido eliminado.")
         }
       }
 }
