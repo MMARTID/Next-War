@@ -45,10 +45,9 @@ class Character {
     
           if (this.x < 0) this.x = 0; //! borde izquierdo
           if (this.x > screenWidth - this.node.offsetWidth) {
-            this.x = screenWidth - this.node.offsetWidth; //! borde derecho
-            console.log(this.x > screenWidth - this.node.offsetWidth)
+              this.x = screenWidth - this.node.offsetWidth; //! borde derecho
+              console.log(this.x > screenWidth - this.node.offsetWidth)
               this.tryToEsc = true;
-              console.log("borde derecho")
               this.onEscape();
             
           }

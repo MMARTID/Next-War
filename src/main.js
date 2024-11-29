@@ -33,91 +33,78 @@ function startGame() {
 
 // ------------------------- ENEMIGOS Y LOOP --------------------------------//
 let currentLevelIndex = 0; // Índice de nivel 
+let enemySpawnInterval; 
+let gameLoopInterval;
 const levels = [
-  {
-    enemyCount: 5, 
-    allowedSides: ["right"],
-  },
-  {
-    enemyCount: 10,
-    allowedSides: ["top", "bottom", "right"],
-  },
-  {
-    enemyCount: 15,
-    allowedSides: ["left", "right", "top", "bottom"]
-  },
+  { enemyCount: 5, allowedSides: ["right"] },
+  { enemyCount: 10, allowedSides: ["top", "bottom", "right"] },
+  { enemyCount: 15, allowedSides: ["left", "right", "top", "bottom"] },
 ];
 
 function startGameLoop() {
   //! Loop enemigos y niveles
-  setInterval(() => {
+  enemySpawnInterval = setInterval(() => {
     const level = levels[currentLevelIndex]
     const newEnemy = new Enemy(level.allowedSides);
     enemies.push(newEnemy);
   }, 2000); // 2 segundos
   
   //! Loop principal del juego
-  setInterval(gameLoop, 50); 
+  gameLoopInterval = setInterval(gameLoop, 50); 
 }
 
 function gameLoop() {
-  
-  enemies.forEach((enemy, index) => {
-      enemy.update();
-
-      // Colisiones con las //!balas
-      bullets.forEach((bullet, bulletIndex) => {
-        if (bullet.x < enemy.x + enemy.width &&
-            bullet.x + bullet.width > enemy.x &&
-            bullet.y < enemy.y + enemy.height &&
-            bullet.y + bullet.height > enemy.y) {
-          
-          enemy.destroy();
-          bullet.destroy();
-          enemies.splice(index, 1);
-          bullets.splice(bulletIndex, 1);
-        }
-      });
-
-      if (enemy.x + enemy.width < 0) {
-        enemy.destroy(); 
-        enemies.splice(index, 1);
-      }
-
-      // colisiones con el //! personaje
-      if (character &&character.x < enemy.x + enemy.width &&
-          character.x + character.node.offsetWidth > enemy.x &&
-          character.y < enemy.y + enemy.height &&
-          character.y + character.node.offsetHeight > enemy.y
-      ) {
-          console.log("¡Colisión detectada!");
-          gameOver()
-      }
-  })
-  bullets.forEach((bullet, index) => {
-    bullet.update();
-
-    // Verificar si la //! bala colide con un enemigo
+  updateEnemies();
+  updateBullets();
+  checkCollisions();
+}
+function updateEnemies() {
+  enemies.forEach((enemy) => enemy.update());
+  enemies = enemies.filter(enemy => {
+    const isInside = enemy.x + enemy.width >= 0;
+    if (!isInside) enemy.destroy();
+    return isInside;
+  })}
+function updateBullets() {
+  bullets.forEach((bullet) => bullet.update());
+  bullets = bullets.filter(bullet => {
+    const isInside = bullet.x <= gameScreenNode.offsetWidth && bullet.x >= 0;
+    if (!isInside) bullet.destroy();
+    return isInside;
+  })}
+function checkCollisions() {
+  enemies.forEach((enemy, enemyIndex) => {
+    // Colisión con el personaje
+    if (character && colision(character, enemy)) {
+      console.log("¡Colisión detectada con el personaje!");
+      gameOver();
+   }
+ })
+  bullets.forEach((bullet, bulletIndex) => {
     enemies.forEach((enemy, enemyIndex) => {
-        if (bullet.x < enemy.x + enemy.width &&
-            bullet.x + bullet.width > enemy.x &&
-            bullet.y < enemy.y + enemy.height &&
-            bullet.y + bullet.height > enemy.y) {
-   console.log("¡Enemigo destruido!");
-
-            bullet.destroy()
-            enemy.destroy()
-            
-            enemies.splice(enemyIndex, 1)
-            bullets.splice(index, 1)
-        }
-    })
-   })
-   bullets = bullets.filter(bullet => bullet.x <= gameScreenNode.offsetWidth && bullet.x >= 0)
+      if (colision(bullet, enemy)) {
+        console.log("¡Enemigo destruido!");
+        bullet.destroy();
+        enemy.destroy();
+        bullets.splice(bulletIndex, 1);
+        enemies.splice(enemyIndex, 1);
+      }
+  })})
 }
 
+function colision(obj1, obj2) {
+  const rect1 = obj1.node.getBoundingClientRect()
+  const rect2 = obj2.node.getBoundingClientRect()
 
-// ------------------ Controles Teclado -------------------------//
+  return (
+    rect1.left < rect2.right &&
+    rect1.right > rect2.left &&
+    rect1.top < rect2.bottom &&
+    rect1.bottom > rect2.top
+  );
+}
+
+// -------------------- Controles Teclado -------------------------//
 document.addEventListener('keydown', (event) => {
   if (event.code === "ArrowUp" && character) {
       console.log("Detectado salto")
@@ -149,6 +136,13 @@ document.addEventListener("keyup", (event) => {
 })
 function gameOver() {
   console.log("Game Over");
+  enemies.forEach(enemy => enemy.destroy());
+    bullets.forEach(bullet => bullet.destroy());
+    enemies = [];
+    bullets = [];
+  clearInterval(enemySpawnInterval);
+  clearInterval(gameLoopInterval)
   gameOverNode.style.display = 'block';
   gameScreenNode.style.display = 'none';
+  splashScreenNode.style.display ='none'
 }
