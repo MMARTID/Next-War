@@ -1,10 +1,11 @@
 class Bomb {
     constructor(x, y) {
-        this.node = document.createElement("div");
+        this.node = document.createElement("img")
+        this.node.src = "./assets/projectile.png" 
         this.x = x;
         this.y = y;
-        this.width = 20;
-        this.height = 20;
+        this.width = 40;
+        this.height = 40;
         this.speed = 5; //! Velocidad de caída
 
         this.node.style.position = "absolute";
@@ -12,7 +13,7 @@ class Bomb {
         this.node.style.height = `${this.height}px`;
         this.node.style.left = `${this.x}px`;
         this.node.style.bottom = `${this.y}px`;
-        this.node.style.backgroundColor = "black";
+        
 
         gameScreenNode.appendChild(this.node);
     }

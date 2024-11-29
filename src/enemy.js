@@ -1,6 +1,7 @@
 class Enemy {
     constructor(allowedSides) {
-        this.node = document.createElement("div");
+        this.node = document.createElement("img")
+        this.node.src = "./assets/monster-pos1.png"
         this.x = gameScreenNode.offsetWidth; //! nodo DESDE la izquierda, 
         this.y = 20
         this.width = 50
@@ -16,7 +17,7 @@ class Enemy {
         this.node.style.height = `${this.height}px`;
         this.node.style.left = `${this.x}px`;
         this.node.style.bottom = `${this.y}px`;
-        this.node.style.backgroundColor = "red";
+        
 
         gameScreenNode.appendChild(this.node);
         this.updateSize()

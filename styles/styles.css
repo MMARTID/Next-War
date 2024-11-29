@@ -21,8 +21,10 @@ body {
     width: 800px;
     height: 400px;
     position: relative;
-    background-color: lightblue;
-  }
+    background-image: url("../assets/Reference-Image.png");
+    background-size: cover; 
+    background-position: center; /
+  }  
   
   #game-box {
     position: relative;
