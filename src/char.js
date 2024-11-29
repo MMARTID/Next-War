@@ -4,7 +4,7 @@ class Character {
         this.node.src = "./assets/character-Walk1.png"
         this.x = 0;
         this.y = 20;
-        this.speed = 10
+        this.speed = 14
         this.gravity = 0.3
         this.velocityY = 0
         this.isJumping = false
@@ -66,7 +66,7 @@ class Character {
           this.node.style.transform = "scaleX(1)";
       }
         this.animateWalk();
-    }, 100);
+    }, 50);
   } 
 
   moveLeft() {

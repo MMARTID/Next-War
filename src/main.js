@@ -14,7 +14,7 @@ gameFloor.style.bottom = '0';
 gameFloor.style.left = '0';
 gameFloor.style.width = '100%';  
 gameFloor.style.height = '20px';  // Altura del suelo
-gameFloor.style.backgroundColor = '#654321';  
+gameFloor.style.backgroundColor = 'black';  
 gameFloor.style.zIndex = '1';
 
 
@@ -23,6 +23,7 @@ startBtnNode.addEventListener("click", startGame);
 
 function startGame() {
   if (!character) {
+    startBtnNode.style.display = "none"
     console.log("El juego ha empezado");
     character = new Character();
     gameScreenNode.appendChild(gameFloor);
@@ -144,7 +145,10 @@ document.addEventListener('keydown', (event) => {
   if (event.code === "Space" && character) {
     console.log("Disparando...");
     character.shoot();
-}
+  }
+  if (event.code === "Enter" && gameOverNode.style.display === 'block') {
+    restartGame();
+  }
 })
 
 document.addEventListener("keyup", (event) => {
@@ -157,6 +161,7 @@ document.addEventListener("keyup", (event) => {
       character.stopMoving()
   }
 })
+
 function gameOver() {
   console.log("Game Over");
   enemies.forEach(enemy => enemy.destroy());
@@ -168,4 +173,21 @@ function gameOver() {
   gameOverNode.style.display = 'block';
   gameScreenNode.style.display = 'none';
   splashScreenNode.style.display ='none'
+}
+function restartGame() {
+  // Limpiar la pantalla de Game Over
+  gameOverNode.style.display = 'none';
+  gameScreenNode.style.display = 'block';
+  splashScreenNode.style.display = 'none';
+  
+  character.x = 0
+  character.y = 20
+  character.node.style.left = `${character.x}px`
+  character.node.style.bottom = `${character.y}px`
+  
+   
+  enemies = []; 
+  bullets = []; 
+  currentLevelIndex = 0; 
+  startGameLoop();
 }
