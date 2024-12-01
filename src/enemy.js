@@ -17,6 +17,15 @@ class Enemy {
         this.node.style.height = `${this.height}px`;
         this.node.style.left = `${this.x}px`;
         this.node.style.bottom = `${this.y}px`;
+        this.currentImgDeath = 0
+        this.deathImages = [
+            "../assets/monster/monster-death01.png",
+            "../assets/monster/monster-death02.png",
+            "../assets/monster/monster-death03.png",
+            "../assets/monster/monster-death04.png",
+            "../assets/monster/monster-death05.png",
+            "../assets/monster/monster-death06.png"
+        ]
         
 
         gameScreenNode.appendChild(this.node);
@@ -72,6 +81,21 @@ class Enemy {
           gameScreenNode.removeChild(this.node);
         } else {
           console.warn("Intentando destruir un nodo que ya ha sido eliminado.")
+          
         }
       }
+      deathAnimate() {
+        let frameIndex = 0; 
+        const frameInterval = 100; 
+    
+        const animationInterval = setInterval(() => {
+            if (frameIndex < this.deathImages.length) {
+                this.node.src = this.deathImages[frameIndex];
+                frameIndex++;
+            } else {
+                clearInterval(animationInterval)
+                this.destroy();
+            }
+        }, frameInterval);
+    }
 }

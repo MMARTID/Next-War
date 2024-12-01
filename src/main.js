@@ -115,8 +115,9 @@ function checkCollisions() {
           if (colision(bullet, enemy)) {
               console.log("¡Enemigo destruido por el disparo!")
               bullet.destroy()
-              enemy.destroy()
               bullets.splice(bulletIndex, 1)
+
+              enemy.deathAnimate()
               enemies.splice(enemyIndex, 1)
 
               destroyedEnemiesCount++;
