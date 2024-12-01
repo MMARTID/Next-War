@@ -70,7 +70,7 @@ function startGameLoop() {
   }, 2000); // 2 segundos
   
   //! Loop principal del juego
-  gameLoopInterval = setInterval(gameLoop, 50); 
+  gameLoopInterval = setInterval(gameLoop, 60); 
 }
 
 function gameLoop() {

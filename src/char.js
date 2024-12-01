@@ -1,7 +1,7 @@
 class Character {
     constructor(){
         this.node = document.createElement("img")
-        this.node.src = "./assets/character-Walk1.png"
+        this.node.src = "./assets/character/character-Walk1.png"
         this.node.height = 50
         this.x = 0;
         this.y = 20;
@@ -14,12 +14,12 @@ class Character {
         this.isMoving = false
 
         this.walkImages = [
-          "./assets/character-Walk01.png", 
-          "./assets/character-Walk02.png", 
-          "./assets/character-Walk03.png",
-          "./assets/character-Walk04.png",
-          "./assets/character-Walk05.png",
-          "./assets/character-Walk06.png",
+          "./assets/character/character-Walk01.png", 
+          "./assets/character/character-Walk02.png", 
+          "./assets/character/character-Walk03.png",
+          "./assets/character/character-Walk04.png",
+          "./assets/character/character-Walk05.png",
+          "./assets/character/character-Walk06.png",
           
        ]
         this.currentImageIndex = 0; 

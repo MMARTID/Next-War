@@ -1,7 +1,7 @@
 class Bomb {
     constructor(x, y) {
         this.node = document.createElement("img")
-        this.node.src = "./assets/projectile.png" 
+        this.node.src = "./assets/monster/projectile.png" 
         this.x = x;
         this.y = y;
         this.width = 40;

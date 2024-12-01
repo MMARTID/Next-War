@@ -1,7 +1,7 @@
 class Enemy {
     constructor(allowedSides) {
         this.node = document.createElement("img")
-        this.node.src = "./assets/monster-pos1.png"
+        this.node.src = "./assets/monster/fly/monster-pos1.png"
         this.x = gameScreenNode.offsetWidth; //! nodo DESDE la izquierda, 
         this.y = 20
         this.width = 50
@@ -17,14 +17,23 @@ class Enemy {
         this.node.style.height = `${this.height}px`;
         this.node.style.left = `${this.x}px`;
         this.node.style.bottom = `${this.y}px`;
+
+        this.currentImgFly = 0 
+        this.flyImages = [
+            "./assets/monster/fly/monster-fly01.png",
+            "./assets/monster/fly/monster-fly-02.png",
+            "./assets/monster/fly/monster-fly-03.png",
+            "./assets/monster/fly/monster-pos1.png"
+        ]
+
         this.currentImgDeath = 0
         this.deathImages = [
-            "../assets/monster/monster-death01.png",
-            "../assets/monster/monster-death02.png",
-            "../assets/monster/monster-death03.png",
-            "../assets/monster/monster-death04.png",
-            "../assets/monster/monster-death05.png",
-            "../assets/monster/monster-death06.png"
+            "../assets/monster/death/monster-death01.png",
+            "../assets/monster/death/monster-death02.png",
+            "../assets/monster/death/monster-death03.png",
+            "../assets/monster/death/monster-death04.png",
+            "../assets/monster/death/monster-death05.png",
+            "../assets/monster/death/monster-death06.png"
         ]
         
 
@@ -66,6 +75,7 @@ class Enemy {
         if (this.x + this.width < 0) {
             this.destroy()
         }
+        this.animateFly()
     }
     updateSize() {
         this.width = this.node.offsetWidth;
@@ -84,6 +94,12 @@ class Enemy {
           
         }
       }
+
+      animateFly() {
+        this.node.src = this.flyImages[this.currentImgFly];
+        this.currentImgFly = (this.currentImgFly + 1) % this.flyImages.length;
+    
+    }
       deathAnimate() {
         let frameIndex = 0; 
         const frameInterval = 100; 
