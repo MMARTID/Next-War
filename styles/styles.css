@@ -23,7 +23,8 @@ body {
     position: relative;
     background-image: url("../assets/Reference-Image.png");
     background-size: cover; 
-    background-position: center; /
+    background-position: center; 
+    overflow: hidden;
   }  
   
   #game-box {

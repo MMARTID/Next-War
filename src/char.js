@@ -2,6 +2,7 @@ class Character {
     constructor(){
         this.node = document.createElement("img")
         this.node.src = "./assets/character-Walk1.png"
+        this.node.height = 50
         this.x = 0;
         this.y = 20;
         this.speed = 14
@@ -35,7 +36,7 @@ class Character {
         this.velocityY = 10;
     
      const updateJump = () => {
-      this.velocityY -= this.gravity * 1.5;
+      this.velocityY -= this.gravity * 1.1;
       this.y += this.velocityY;
 
      if (this.y <= 20) {
