@@ -66,7 +66,7 @@ class Character {
           this.node.style.transform = "scaleX(1)";
       }
         this.animateWalk();
-    }, 50);
+    }, 55);
   } 
 
   moveLeft() {

@@ -4,29 +4,48 @@ const gameOverNode = document.getElementById("game-over-screen");
 const startBtnNode = document.querySelector("#start-btn");
 
 let character = null
-let enemies = [];
-let bullets = [];
-const gameFloor = document.createElement("div")
-
-gameFloor.id = "suelo";
-gameFloor.style.position = 'absolute';
-gameFloor.style.bottom = '0';
-gameFloor.style.left = '0';
-gameFloor.style.width = '100%';  
-gameFloor.style.height = '20px';  // Altura del suelo
-gameFloor.style.backgroundColor = 'black';  
-gameFloor.style.zIndex = '1';
-
+let enemies = []
+let bullets = []
+let destroyedEnemiesCount = 0;
 
 
 startBtnNode.addEventListener("click", startGame);
 
+const gameFloor = document.createElement("div")
+gameFloor.id = "suelo"
+gameFloor.style.position = 'absolute'
+gameFloor.style.bottom = '0'
+gameFloor.style.left = '0'
+gameFloor.style.width = '100%'
+gameFloor.style.height = '20px'
+gameFloor.style.backgroundColor = 'black'
+gameFloor.style.zIndex = '1'
+
+const destroyedEnemyCounterNode = document.createElement("div");
+destroyedEnemyCounterNode.id = "destroyed-enemy-counter"
+destroyedEnemyCounterNode.style.position = 'absolute'
+destroyedEnemyCounterNode.style.top = '10px'
+destroyedEnemyCounterNode.style.left = '10px'
+destroyedEnemyCounterNode.style.fontSize = '18px'
+destroyedEnemyCounterNode.style.color = 'white';
+destroyedEnemyCounterNode.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'
+destroyedEnemyCounterNode.style.padding = '5px 10px'
+destroyedEnemyCounterNode.style.borderRadius = '5px'
+destroyedEnemyCounterNode.style.zIndex = '100'
+
+
+function updateDestroyedEnemyCounter() {
+  destroyedEnemyCounterNode.textContent = `Enemigos destruidos: ${destroyedEnemiesCount}`;
+}
+
 function startGame() {
   if (!character) {
     startBtnNode.style.display = "none"
-    console.log("El juego ha empezado");
-    character = new Character();
-    gameScreenNode.appendChild(gameFloor);
+    console.log("El juego ha empezado")
+    character = new Character()
+    gameScreenNode.appendChild(gameFloor)
+    gameScreenNode.appendChild(destroyedEnemyCounterNode)
+    updateDestroyedEnemyCounter()
     startGameLoop();
    
   }
@@ -55,10 +74,11 @@ function startGameLoop() {
 }
 
 function gameLoop() {
-  updateEnemies();
-  updateBullets();
-  updateBombs();
-  checkCollisions();
+  updateEnemies()
+  updateBullets()
+  updateBombs()
+  checkCollisions()
+  updateDestroyedEnemyCounter()
 }
 function updateEnemies() {
   enemies.forEach((enemy) => enemy.update());
@@ -98,6 +118,9 @@ function checkCollisions() {
               enemy.destroy()
               bullets.splice(bulletIndex, 1)
               enemies.splice(enemyIndex, 1)
+
+              destroyedEnemiesCount++;
+              updateDestroyedEnemyCounter();
           }
       })
     }
@@ -174,6 +197,7 @@ function gameOver() {
   gameScreenNode.style.display = 'none';
   splashScreenNode.style.display ='none'
 }
+
 function restartGame() {
   // Limpiar la pantalla de Game Over
   gameOverNode.style.display = 'none';
@@ -185,9 +209,13 @@ function restartGame() {
   character.node.style.left = `${character.x}px`
   character.node.style.bottom = `${character.y}px`
   
-   
+  bullets.forEach((bullet) => bullet.destroy());
   enemies = []; 
   bullets = []; 
   currentLevelIndex = 0; 
+
+  destroyedEnemiesCount = 0
+  updateDestroyedEnemyCounter()
+
   startGameLoop();
 }
