@@ -9,10 +9,9 @@ class Character {
         this.gravity = 0.3
         this.velocityY = 0
         this.isJumping = false
-        this.movementInterval = null
-        this.tryToEsc = false
         this.isMoving = false
-
+        this.currentDirection = 0
+         
         this.walkImages = [
           "./assets/character/character-Walk01.png", 
           "./assets/character/character-Walk02.png", 
