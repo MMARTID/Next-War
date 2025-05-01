@@ -28,12 +28,12 @@ class Enemy {
 
         this.currentImgDeath = 0
         this.deathImages = [
-            "../assets/monster/death/monster-death01.png",
-            "../assets/monster/death/monster-death02.png",
-            "../assets/monster/death/monster-death03.png",
-            "../assets/monster/death/monster-death04.png",
-            "../assets/monster/death/monster-death05.png",
-            "../assets/monster/death/monster-death06.png"
+            "./assets/monster/death/monster-death01.png",
+            "./assets/monster/death/monster-death02.png",
+            "./assets/monster/death/monster-death03.png",
+            "./assets/monster/death/monster-death04.png",
+            "./assets/monster/death/monster-death05.png",
+            "./assets/monster/death/monster-death06.png"
         ]
         
 

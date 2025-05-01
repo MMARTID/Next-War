@@ -1,7 +1,7 @@
 class Bullet {
     constructor(x, y) {
         this.node = document.createElement("img")
-        this.node.src = "../assets/bullet/bullet.png"
+        this.node.src = "./assets/bullet/bullet.png"
         this.node.style.position = "absolute"
         this.node.style.width = "30px"
         this.node.style.height = "15px"
